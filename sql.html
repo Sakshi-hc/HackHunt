@@ -1,0 +1,65 @@
+-- Create a table for students (assuming you need one to handle student data)
+
+create database Quiz;
+use quiz;
+CREATE TABLE students (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    class VARCHAR(255) NOT NULL
+);
+-- Create a table for quizzes
+CREATE TABLE quizzes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    deadline DATETIME NOT NULL,  -- To store both date and time
+    time_limit INT NOT NULL      -- Time limit in seconds
+);
+-- Create a table for questions
+CREATE TABLE questions (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    quiz_id INT NOT NULL,
+    question_text TEXT NOT NULL,
+    type ENUM('MCQ', 'shortAnswer', 'trueFalse') NOT NULL,
+    FOREIGN KEY (quiz_id) REFERENCES quizzes(id) ON DELETE CASCADE
+);
+-- Create a table for options (for MCQ questions)
+CREATE TABLE optionss (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    question_id INT NOT NULL,
+    option_text VARCHAR(255) NOT NULL,
+    is_correct BOOLEAN DEFAULT FALSE, -- Added flag for marking the correct option
+    FOREIGN KEY (question_id) REFERENCES questions(id) ON DELETE CASCADE
+);
+-- Create a table for student responses
+CREATE TABLE responses (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    student_id INT NOT NULL,
+    quiz_id INT NOT NULL,
+    question_id INT NOT NULL,
+    response TEXT,
+    FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE,
+    FOREIGN KEY (quiz_id) REFERENCES quizzes(id) ON DELETE CASCADE,
+    FOREIGN KEY (question_id) REFERENCES questions(id) ON DELETE CASCADE
+);
+-- Create a table for storing student performance
+CREATE TABLE performance (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    student_id INT NOT NULL,
+    quiz_id INT NOT NULL,
+    score INT,
+    total_questions INT,
+    FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE,
+    FOREIGN KEY (quiz_id) REFERENCES quizzes(id) ON DELETE CASCADE
+);
+INSERT INTO quizzes (title, deadline, time_limit)
+VALUES ('Math Quiz', '2025-03-20 15:30:00', 300); -- 5 minutes time limit
+INSERT INTO questions (quiz_id, question_text, type)
+VALUES (1, 'What is 2+2?', 'shortAnswer'),
+       (1, 'Which is the capital of France?', 'MCQ');
+INSERT INTO optionss (question_id, option_text, is_correct)
+VALUES (2, 'Paris', TRUE), 
+       (2, 'London', FALSE),
+       (2, 'Berlin', FALSE);
+ 
+
