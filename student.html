@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Login</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Quiz - Student Login</h1>
+        <form id="loginForm">
+            <label for="email">Email:</label>
+            <input type="email" id="email" required>
+            <br>
+            <label for="username">Username:</label>
+            <input type="text" id="username" required>
+            <br>
+            <button type="submit">Login</button>
+        </form>
+    </div>
+
+    <script>
+       
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const username = document.getElementById('username').value.trim();
+            const email = document.getElementById('email').value;
+
+
+            console.log('Username:', username, 'Email:', email);
+
+            // Simulate login success and redirection to the student's quiz dashboard
+            alert('Login successful! Redirecting to your quizzes...');
+            
+            // Store the username and email for later use (e.g., displaying on the dashboard)
+            localStorage.setItem('username', username);
+            localStorage.setItem('email', email);
+
+            // Redirect to the student's quiz dashboard page
+            window.location.href = "student_dashboard.html"; // Assuming the dashboard page exists
+        });
+    </script>
+</body>
+</html>
