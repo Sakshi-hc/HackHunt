@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <h1>Welcome, <span id="studentName"></span></h1>
+        <div class="quizzes">
+            <h2>Your Assigned Quizzes:</h2>
+            <ul id="quizList">
+                <!-- Quizzes will be dynamically added here -->
+            </ul>
+        </div>
+        <div id="quizDetails" style="display:none;">
+            <h3 id="quizTitle"></h3>
+            <div id="quizTimer"></div>
+            <form id="quizForm">
+                <label>Question 1:</label>
+                <input type="text" id="question1" required>
+                <button type="submit">Submit Quiz</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Simulating a list of quizzes assigned to the student
+        const quizzes = [
+            { id: 1, title: "Math Quiz", timeLimit: 300 }, // 5 minutes in seconds
+            // { id: 2, title: "Science Quiz", timeLimit: 600 } // 10 minutes in seconds
+        ];
+
+        // Fetching username and email from localStorage
+        const username = localStorage.getItem('username');
+        const email = localStorage.getItem('email');
+
+        // Display the student's name
+        document.getElementById('studentName').innerText = username;
+
+        // Render the quizzes list dynamically
+        const quizList = document.getElementById('quizList');
+        quizzes.forEach(quiz => {
+            const listItem = document.createElement('li');
+            listItem.innerHTML = `<a href="#" onclick="startQuiz(${quiz.id})">${quiz.title}</a>`;
+            quizList.appendChild(listItem);
+        });
+
+        // Start a quiz
+        function startQuiz(quizId) {
+            const quiz = quizzes.find(q => q.id === quizId);
+            if (!quiz) return;
+
+            // Show quiz details
+            document.getElementById('quizDetails').style.display = 'block';
+            document.getElementById('quizTitle').innerText = quiz.title;
+
+            // Timer for the quiz
+            let timeLeft = quiz.timeLimit;
+            const timerElement = document.getElementById('quizTimer');
+            const timerInterval = setInterval(() => {
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                timerElement.innerText = `Time Left: ${minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
+                timeLeft--;
+
+                if (timeLeft < 0) {
+                    clearInterval(timerInterval);
+                    alert("Time's up! Submitting quiz automatically.");
+                    submitQuiz();
+                }
+            }, 1000);
+        }
+
+        // Submit quiz
+    //    function submitQuiz() {
+         //   const quizForm = document.getElementById('quizForm');
+         //   const responses = {
+         //       question1: document.getElementById('question1').value
+         //   };
+         //   console.log('Quiz Submitted:', responses);
+
+          // alert('Your quiz has been submitted!');
+
+                // Redirect or show the score after submission (this can be further developed)
+             //   window.location.href = "student_results.html"; // Removed space at the end of the URL
+     //   }
+    </script>
+    <script src="studentFunctions.js"></script>
+
+</body>
+</html>
